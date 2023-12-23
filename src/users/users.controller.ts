@@ -12,10 +12,10 @@ import { AccessTokenGuard } from 'src/auth/login/guards/access-token/access-toke
 export class UsersController {
   constructor(private readonly usersService: UserService) {}
 
-  @Get('/:userId')
+  @Get('/:id')
   public async findOneUser(
-    @Param('userId') userId: string,
+    @Param('id') id: string,
   ): Promise<AccountsUser> {
-    return this.usersService.findById(userId);
+    return this.usersService.findById(id);
   }
 }
