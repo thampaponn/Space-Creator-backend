@@ -18,7 +18,7 @@ import { LoginModule } from './auth/login/login.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        type: 'mysql',
+        type: 'mongodb',
         host: config.get<string>('TYPEORM_HOST'),
         port: config.get<number>('TYPEORM_PORT'),
         username: config.get<string>('TYPEORM_USERNAME'),
