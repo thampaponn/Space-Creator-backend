@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ObjectIdColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum UserRole {
   ADMIN = "admin",
@@ -7,16 +7,16 @@ export enum UserRole {
 
 @Entity({ name: 'users' })
 export class Users {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @ObjectIdColumn()
+  _id: string;
 
-  @Column({ name: 'first_name' })
+  @Column()
   firstName: string;
 
-  @Column({ name: 'last_name' })
+  @Column()
   lastName: string;
 
-  @Column({ name: 'student_id', unique: true })
+  @Column({ unique: true })
   studentId: string;
 
   @Column({ unique: true })

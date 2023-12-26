@@ -3,6 +3,8 @@ import { IsEmail, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { UserRole } from '../entities/user.entity';
 
 export class UsersDto {
+  _id: string;
+
   @ApiProperty()
   @IsString()
   @MaxLength(30)
@@ -37,6 +39,4 @@ export class UsersDto {
   @IsString()
   @IsNotEmpty()
   role: UserRole;
-
-
 }

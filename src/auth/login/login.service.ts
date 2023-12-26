@@ -27,18 +27,18 @@ export class LoginService {
   private async generateTokens(user: Users) {
     const [accessToken, refreshToken] = await Promise.all([
       this.signToken<Partial<JWTPayload>>(
-        user.id,
+        user._id,
         this.jwtConiguration.accessTokenTtl,
         { email: user.email },
       ),
-      this.signToken(user.id, this.jwtConiguration.refreshTokenTtl),
+      this.signToken(user._id, this.jwtConiguration.refreshTokenTtl),
     ]);
 
     return {
       accessToken,
       refreshToken,
       user: {
-        id: user.id,
+        id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,

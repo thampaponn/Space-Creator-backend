@@ -3,6 +3,8 @@ import { IsEmail, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { UserRole } from 'src/users/entities/user.entity';
 
 export class CreateRegisterDto {
+  _id: string;
+
   @ApiProperty()
   @IsString()
   @MaxLength(30)

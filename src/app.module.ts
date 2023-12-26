@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { RegisterModule } from './auth/register/register.module';
 import { LoginModule } from './auth/login/login.module';
+import { RoomsModule } from './rooms/rooms.module';
 
 @Module({
   imports: [
@@ -19,19 +20,19 @@ import { LoginModule } from './auth/login/login.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         type: 'mongodb',
-        host: config.get<string>('TYPEORM_HOST'),
+        url: config.get<string>('TYPEORM_HOST'),
         port: config.get<number>('TYPEORM_PORT'),
-        username: config.get<string>('TYPEORM_USERNAME'),
-        password: config.get<string>('TYPEORM_PASSWORD'),
         database: config.get<string>('TYPEORM_DATABASE'),
         entities: [__dirname + '/**/*.{model,entity}.{ts,js}'],
         synchronize: true,
+        logging: true,
       }),
     }),
     AuthModule,
     UsersModule,
     RegisterModule,
     LoginModule,
+    RoomsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
