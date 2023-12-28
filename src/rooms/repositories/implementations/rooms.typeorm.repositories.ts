@@ -3,6 +3,7 @@ import { RoomsRepository } from "../rooms.repositories.interface";
 import { Repository } from 'typeorm';
 import { RoomsDto } from "src/rooms/dto/rooms.dto";
 import * as uuid from 'uuid';
+import { UpdateRoomDto } from "src/rooms/dto/update-room.dto";
 
 export class RoomsTypeOrmRepository implements RoomsRepository {
     constructor(
@@ -25,5 +26,14 @@ export class RoomsTypeOrmRepository implements RoomsRepository {
         roomsDto._id = uuid.v4();
 
         return await this.roomRepository.save(roomsDto);
+    }
+
+
+    public async update(id: string, updateRooms: UpdateRoomDto) {
+        return this.roomRepository.update(id, updateRooms);
+    }
+
+    public async delete(id: string) {
+        return this.roomRepository.delete(id);
     }
 }

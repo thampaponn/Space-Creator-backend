@@ -5,6 +5,8 @@ export interface RoomsRepository {
     findByName(name: string);
     findById(id: string);
     create(room: RoomsDto);
+    update(id: string, room: RoomsDto);
+    delete(id: string);
 }
 
 export const ROOMS_REPOSITORY_TOKEN = 'ROOMS_REPOSITORY';

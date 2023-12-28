@@ -38,4 +38,8 @@ export class UsersTypeOrmRepository implements UsersRepository {
 
     return await this.userRepository.save(userDto);
   }
+
+  public async delete(_id: string) {
+    return await this.userRepository.delete(_id);
+  }
 }

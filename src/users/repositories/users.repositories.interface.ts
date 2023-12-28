@@ -6,6 +6,7 @@ export interface UsersRepository {
   findBySub(sub: string);
   findById(id: string);
   create(user: UsersDto);
+  delete(id: string);
 }
 
 export const USERS_REPOSITORY_TOKEN = 'USERS_REPOSITORY';
