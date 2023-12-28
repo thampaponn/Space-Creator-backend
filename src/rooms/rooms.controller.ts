@@ -1,15 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, HttpStatus } from '@nestjs/common';
 import { RoomsService } from './rooms.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
+import { ApiBody } from '@nestjs/swagger';
+import { Rooms } from './entities/rooms.entity';
 
 @Controller('rooms')
 export class RoomsController {
-  constructor(private readonly roomsService: RoomsService) {}
+  constructor(private readonly roomsService: RoomsService) { }
 
   @Post()
-  create(@Body() createRoomDto: CreateRoomDto) {
-    return this.roomsService.create(createRoomDto);
+  @ApiBody({ type: CreateRoomDto })
+  async create(@Body() createRoomDto: CreateRoomDto): Promise<any> {
+    try {
+      return await this.roomsService.create(createRoomDto);
+    } catch (err) {
+      throw new BadRequestException(err, 'Error: Room cannot be created!');
+    }
   }
 
   @Get()
@@ -17,18 +24,22 @@ export class RoomsController {
     return this.roomsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.roomsService.findOneByName(id);
+  @Get(':name')
+  public async findOne(@Param('name') name: string): Promise<Rooms> {
+    return this.roomsService.findOneByName(name);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRoomDto: UpdateRoomDto) {
-    return this.roomsService.update(id, updateRoomDto);
+  async update(@Param('id') id: string, @Body() updateRoomDto: UpdateRoomDto): Promise<Rooms> {
+    try {
+      return await this.roomsService.update(id, updateRoomDto);
+    } catch (err) {
+      throw new BadRequestException(err, 'Error: Room cannot be updated!');
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async delete(@Param('id') id: string) {
     return this.roomsService.delete(id);
   }
 }

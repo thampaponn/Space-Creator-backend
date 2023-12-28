@@ -6,6 +6,9 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Rooms } from "../entities/rooms.entity";
 import { RoomsTypeOrmRepository } from "./implementations/rooms.typeorm.repositories";
+import { config } from 'dotenv';
+
+config();
 
 export const configService = new ConfigService();
 
@@ -24,7 +27,7 @@ export function provideRoomsRepository(): Provider[] {
 async function provideRoomsRepositoryFactory(dependenciesProvider: RoomsRepoDependenciesProvider,) {
     await ConfigModule.envVariablesLoaded;
 
-    switch (configService.get('ROOMS_DATASOURCE')) {
+    switch (configService.get('DATASOURCE')) {
         case DataSource.TYPEORM:
             return new RoomsTypeOrmRepository(
                 dependenciesProvider.typeOrmRepository

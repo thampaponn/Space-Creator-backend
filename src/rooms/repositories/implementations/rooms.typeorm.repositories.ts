@@ -1,9 +1,9 @@
 import { Rooms } from "src/rooms/entities/rooms.entity";
 import { RoomsRepository } from "../rooms.repositories.interface";
 import { Repository } from 'typeorm';
-import { RoomsDto } from "src/rooms/dto/rooms.dto";
 import * as uuid from 'uuid';
 import { UpdateRoomDto } from "src/rooms/dto/update-room.dto";
+import { CreateRoomDto } from "src/rooms/dto/create-room.dto";
 
 export class RoomsTypeOrmRepository implements RoomsRepository {
     constructor(
@@ -22,14 +22,15 @@ export class RoomsTypeOrmRepository implements RoomsRepository {
         return await this.roomRepository.findOneBy({_id: id});
     }
 
-    public async create(roomsDto: RoomsDto): Promise<Rooms> {
+    public async create(roomsDto: CreateRoomDto): Promise<Rooms | any> {
+        
         roomsDto._id = uuid.v4();
 
         return await this.roomRepository.save(roomsDto);
     }
 
 
-    public async update(id: string, updateRooms: UpdateRoomDto) {
+    public async update(id: string, updateRooms: UpdateRoomDto): Promise<Rooms | any> {
         return this.roomRepository.update(id, updateRooms);
     }
 

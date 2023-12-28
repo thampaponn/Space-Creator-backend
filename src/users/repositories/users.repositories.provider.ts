@@ -30,7 +30,7 @@ async function provideUsersRepositoryFactory(
 ) {
   await ConfigModule.envVariablesLoaded;
 
-  switch (configService.get('USERS_DATASOURCE')) {
+  switch (configService.get('DATASOURCE')) {
     case DataSource.TYPEORM:
       return new UsersTypeOrmRepository(
         dependenciesProvider.typeOrmRepository,
