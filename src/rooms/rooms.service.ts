@@ -39,7 +39,7 @@ export class RoomsService {
       if (imagedto) {
         await this.imageService.uploadImage(imagedto);
       }
-      return await this.roomsRepository.create({ ...{image: imagedto.originalname}, ...rooms });
+      return await this.roomsRepository.create({ ...{ image: imagedto.originalname }, ...rooms });
     } catch (error) {
       console.log(error);
       return {
@@ -49,13 +49,21 @@ export class RoomsService {
     }
   }
 
-  public async update(id: string, updateRooms: UpdateRoomDto): Promise<Rooms | any> {
+  public async update(id: string, image: Express.Multer.File, updateRooms: UpdateRoomDto): Promise<Rooms | any> {
     const updateRoom = this.roomsRepository.findById(id)
     if (!updateRoom) {
       throw new HttpException('Room not found', HttpStatus.NOT_FOUND)
     }
     try {
-      await this.roomsRepository.update(id, updateRooms);
+      const imagedto = {
+        ...image,
+        originalname: `${Date.now()}`
+      }
+      if (imagedto) {
+        await this.imageService.deleteImage((await updateRoom).image);
+        await this.imageService.uploadImage(imagedto);
+      }
+      await this.roomsRepository.update(id, { ...{ image: imagedto.originalname }, ...updateRooms });
       return "Room updated successfully"
     } catch (error) {
       console.log(error);
@@ -67,11 +75,12 @@ export class RoomsService {
   }
 
   public async delete(id: string) {
-    const removeUser = await this.roomsRepository.findById(id);
-    if (!removeUser) {
+    const removeRoom = await this.roomsRepository.findById(id);
+    if (!removeRoom) {
       throw new HttpException('Room not found', HttpStatus.NOT_FOUND)
     }
     await this.roomsRepository.delete(id);
+    await this.imageService.deleteImage(removeRoom.image);
     return "Room deleted successfully"
   }
 }

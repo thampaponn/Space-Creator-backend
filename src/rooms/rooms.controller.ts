@@ -15,7 +15,7 @@ export class RoomsController {
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('image'))
   @ApiBody({ type: CreateRoomDto })
-  async create(@UploadedFile() image: Express.Multer.File,@Body() createRoomDto: CreateRoomDto): Promise<any> {
+  async create(@UploadedFile() image: Express.Multer.File, @Body() createRoomDto: CreateRoomDto): Promise<any> {
     try {
       return await this.roomsService.create(image, createRoomDto);
     } catch (err) {
@@ -34,16 +34,23 @@ export class RoomsController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateRoomDto: UpdateRoomDto): Promise<Rooms> {
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('image'))
+  @ApiBody({ type: UpdateRoomDto })
+  async update(@Param('id') id: string, @UploadedFile() image: Express.Multer.File, @Body() updateRoomDto: UpdateRoomDto): Promise<Rooms> {
     try {
-      return await this.roomsService.update(id, updateRoomDto);
+      return await this.roomsService.update(id, image, updateRoomDto);
     } catch (err) {
       throw new BadRequestException(err, 'Error: Room cannot be updated!');
     }
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string) {
-    return this.roomsService.delete(id);
+  async delete(@Param('id') id: string): Promise<any> {
+    try {
+      return await this.roomsService.delete(id);
+    } catch (err) {
+      throw err;
+    }
   }
 }
