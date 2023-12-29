@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { RegisterModule } from './auth/register/register.module';
 import { LoginModule } from './auth/login/login.module';
 import { RoomsModule } from './rooms/rooms.module';
+import { ImagesModule } from './images/images.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { RoomsModule } from './rooms/rooms.module';
     RegisterModule,
     LoginModule,
     RoomsModule,
+    ImagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -4,12 +4,14 @@ import { UpdateRoomDto } from './dto/update-room.dto';
 import { ROOMS_REPOSITORY_TOKEN } from './repositories/rooms.repositories.interface';
 import { RoomsTypeOrmRepository } from './repositories/implementations/rooms.typeorm.repositories';
 import { Rooms } from './entities/rooms.entity';
+import { ImagesService } from 'src/images/images.service';
 
 @Injectable()
 export class RoomsService {
   constructor(
     @Inject(ROOMS_REPOSITORY_TOKEN)
     public readonly roomsRepository: RoomsTypeOrmRepository,
+    private imageService: ImagesService,
   ) { }
 
   public async findAll(): Promise<Rooms[]> {
@@ -28,9 +30,16 @@ export class RoomsService {
     return await this.roomsRepository.findByName(name);
   }
 
-  public async create(rooms: CreateRoomDto): Promise<Rooms | any> {
+  public async create(image: Express.Multer.File, rooms: CreateRoomDto): Promise<Rooms | any> {
     try {
-      return await this.roomsRepository.create(rooms);
+      const imagedto = {
+        ...image,
+        originalname: `${Date.now()}`
+      }
+      if (imagedto) {
+        await this.imageService.uploadImage(imagedto);
+      }
+      return await this.roomsRepository.create({ ...{image: imagedto.originalname}, ...rooms });
     } catch (error) {
       console.log(error);
       return {
@@ -40,13 +49,14 @@ export class RoomsService {
     }
   }
 
-  public async update(_id: string, updateRooms: UpdateRoomDto): Promise<Rooms | any> {
-    const updateRoom = this.roomsRepository.findById(_id)
+  public async update(id: string, updateRooms: UpdateRoomDto): Promise<Rooms | any> {
+    const updateRoom = this.roomsRepository.findById(id)
     if (!updateRoom) {
       throw new HttpException('Room not found', HttpStatus.NOT_FOUND)
     }
     try {
-      return await this.roomsRepository.update(_id, updateRooms);
+      await this.roomsRepository.update(id, updateRooms);
+      return "Room updated successfully"
     } catch (error) {
       console.log(error);
       return {
@@ -56,12 +66,13 @@ export class RoomsService {
     }
   }
 
-  public async delete(_id: string) {
-    const removeUser = await this.roomsRepository.findById(_id);
+  public async delete(id: string) {
+    const removeUser = await this.roomsRepository.findById(id);
     if (!removeUser) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND)
+      throw new HttpException('Room not found', HttpStatus.NOT_FOUND)
     }
-    return await this.roomsRepository.delete(_id);
+    await this.roomsRepository.delete(id);
+    return "Room deleted successfully"
   }
 }
 

@@ -4,6 +4,9 @@ import { IsBoolean, IsNotEmpty, IsNumber, IsString, MaxLength } from 'class-vali
 export class RoomsDto {
     _id: string;
 
+    @ApiProperty({ type: 'string', format: 'binary', description: 'Image file' })
+    image?: any;
+
     @ApiProperty()
     @IsString()
     @MaxLength(45)

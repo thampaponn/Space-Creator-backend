@@ -1,9 +1,12 @@
-import { Column, Entity, ObjectIdColumn } from "typeorm";
+import { Binary, Column, Entity, ObjectIdColumn } from "typeorm";
 
 @Entity({ name: 'rooms' })
 export class Rooms {
     @ObjectIdColumn()
     _id: string;
+
+    @Column()
+    image: string;
 
     @Column({ unique: true })
     name: string;

@@ -9,7 +9,7 @@ export class UsersTypeOrmRepository implements UsersRepository {
   constructor(
     private readonly userRepository: Repository<Users>,
     private readonly hashingService: HashingService,
-  ) {}
+  ) { }
 
   public async findAll(): Promise<Users[]> {
     return await this.userRepository.find();
@@ -39,7 +39,11 @@ export class UsersTypeOrmRepository implements UsersRepository {
     return await this.userRepository.save(userDto);
   }
 
-  public async delete(_id: string) {
-    return await this.userRepository.delete(_id);
+  public async delete(id: string) {
+    return await this.userRepository.delete({ _id: id });
+  }
+
+  public async update(id: string, updateUser: UsersDto): Promise<Users | any> {
+    return await this.userRepository.update({ _id: id}, updateUser);
   }
 }

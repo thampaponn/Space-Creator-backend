@@ -8,7 +8,7 @@ import { CreateRoomDto } from "src/rooms/dto/create-room.dto";
 export class RoomsTypeOrmRepository implements RoomsRepository {
     constructor(
         private readonly roomRepository: Repository<Rooms>,
-    ) {}
+    ) { }
 
     public async findAll(): Promise<Rooms[]> {
         return await this.roomRepository.find();
@@ -19,11 +19,11 @@ export class RoomsTypeOrmRepository implements RoomsRepository {
     }
 
     public async findById(id: string): Promise<Rooms> {
-        return await this.roomRepository.findOneBy({_id: id});
+        return await this.roomRepository.findOneBy({ _id: id });
     }
 
     public async create(roomsDto: CreateRoomDto): Promise<Rooms | any> {
-        
+
         roomsDto._id = uuid.v4();
 
         return await this.roomRepository.save(roomsDto);
@@ -31,10 +31,10 @@ export class RoomsTypeOrmRepository implements RoomsRepository {
 
 
     public async update(id: string, updateRooms: UpdateRoomDto): Promise<Rooms | any> {
-        return this.roomRepository.update(id, updateRooms);
+        return this.roomRepository.update({ _id: id }, updateRooms);
     }
 
     public async delete(id: string) {
-        return this.roomRepository.delete(id);
+        return this.roomRepository.delete({ _id: id });
     }
 }

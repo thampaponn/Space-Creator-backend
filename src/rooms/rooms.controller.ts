@@ -1,19 +1,23 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, HttpStatus, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { RoomsService } from './rooms.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
-import { ApiBody } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { Rooms } from './entities/rooms.entity';
+import { FileInterceptor } from '@nestjs/platform-express';
 
+@ApiTags('rooms')
 @Controller('rooms')
 export class RoomsController {
   constructor(private readonly roomsService: RoomsService) { }
 
-  @Post()
+  @Post('create')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('image'))
   @ApiBody({ type: CreateRoomDto })
-  async create(@Body() createRoomDto: CreateRoomDto): Promise<any> {
+  async create(@UploadedFile() image: Express.Multer.File,@Body() createRoomDto: CreateRoomDto): Promise<any> {
     try {
-      return await this.roomsService.create(createRoomDto);
+      return await this.roomsService.create(image, createRoomDto);
     } catch (err) {
       throw new BadRequestException(err, 'Error: Room cannot be created!');
     }
@@ -24,9 +28,9 @@ export class RoomsController {
     return this.roomsService.findAll();
   }
 
-  @Get(':name')
-  public async findOne(@Param('name') name: string): Promise<Rooms> {
-    return this.roomsService.findOneByName(name);
+  @Get(':id')
+  public async findOne(@Param('id') id: string): Promise<Rooms> {
+    return this.roomsService.findById(id);
   }
 
   @Patch(':id')
