@@ -18,6 +18,10 @@ export class ReservationService {
 
   public async create(createReservationDto: CreateReservationDto): Promise<Reservation | any> {
     try {
+      const checkOverlapping = await this.reservationRepository.overlap(createReservationDto.roomId, createReservationDto.startTime, createReservationDto.endTime);
+      if (checkOverlapping) {
+        throw new HttpException('Reservation is overlapping', HttpStatus.BAD_REQUEST)
+      }
       return await this.reservationRepository.create(createReservationDto);
     } catch (error) {
       console.log(error);
