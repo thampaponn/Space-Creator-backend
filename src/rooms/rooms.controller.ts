@@ -29,7 +29,7 @@ export class RoomsController {
   }
 
   @Get(':id')
-  public async findOne(@Param('id') id: string): Promise<Rooms> {
+  async findOne(@Param('id') id: string): Promise<Rooms> {
     return this.roomsService.findById(id);
   }
 

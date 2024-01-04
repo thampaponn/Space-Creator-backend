@@ -39,7 +39,6 @@ export class CreateRoomDto {
 
     @ApiProperty()
     @IsBoolean()
-    @MaxLength(30)
     @IsNotEmpty()
     status: boolean;
 

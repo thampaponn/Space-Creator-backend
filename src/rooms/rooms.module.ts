@@ -12,6 +12,7 @@ import { ImagesService } from 'src/images/images.service';
   providers: [
     RoomsService, 
     ImagesService,
-    ...provideRoomsRepository()],
+    ...provideRoomsRepository()
+  ],
 })
 export class RoomsModule {}
