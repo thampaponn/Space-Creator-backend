@@ -1,34 +1,47 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  BadRequestException,
+} from '@nestjs/common';
 import { ReportService } from './report.service';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { CreateReportDto } from './dto/create-report.dto';
-import { UpdateReportDto } from './dto/update-report.dto';
+import { Report } from './entities/report.entity';
 
+@ApiTags('report')
 @Controller('report')
 export class ReportController {
   constructor(private readonly reportService: ReportService) {}
 
-  @Post()
-  create(@Body() createReportDto: CreateReportDto) {
-    return this.reportService.create(createReportDto);
+  @Post('create')
+  @ApiBody({ type: CreateReportDto })
+  async create(@Body() createReportDto: CreateReportDto): Promise<any> {
+    try {
+      return this.reportService.create(createReportDto);
+    } catch (error) {
+      throw new BadRequestException(error, 'Error: Report cannot be created!');
+    }
   }
 
   @Get()
   findAll() {
     return this.reportService.findAll();
   }
-
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.reportService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateReportDto: UpdateReportDto) {
-    return this.reportService.update(+id, updateReportDto);
+  async findById(@Param('id') id: string): Promise<Report> {
+    return this.reportService.findById(id);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.reportService.remove(+id);
+  async delete(@Param('id') id: string): Promise<any> {
+    try {
+      return this.reportService.delete(id);
+    } catch (error) {
+      throw error;
+    }
   }
 }

@@ -8,9 +8,6 @@ import { provideReservationRepository } from './repositories/reservation.reposit
 @Module({
   imports: [TypeOrmModule.forFeature([Reservation])],
   controllers: [ReservationController],
-  providers: [
-    ReservationService,
-    ...provideReservationRepository()
-  ],
+  providers: [ReservationService, ...provideReservationRepository()],
 })
-export class ReservationModule { }
+export class ReservationModule {}

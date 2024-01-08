@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ReportStatus } from '../entities/report.entity';
 import { IsDate, IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { ReportStatus } from '../entities/report.entity';
 
-export class CreateReportDto {
+export class ReportDto {
   _id: string;
 
   @ApiProperty()
@@ -22,10 +22,9 @@ export class CreateReportDto {
   @ApiProperty()
   @IsDate()
   @IsNotEmpty()
-  updatedAt: Date;
+  updateAt: Date;
 
   @ApiProperty()
-  // eslint-disable-next-line prettier/prettier
   @IsString()
   @MaxLength(100)
   detail: string;

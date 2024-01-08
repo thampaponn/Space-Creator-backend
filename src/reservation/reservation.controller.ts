@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  BadRequestException,
+} from '@nestjs/common';
 import { ReservationService } from './reservation.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
@@ -7,15 +15,20 @@ import { Reservation } from './entities/reservation.entity';
 @ApiTags('reservation')
 @Controller('reservation')
 export class ReservationController {
-  constructor(private readonly reservationService: ReservationService) { }
+  constructor(private readonly reservationService: ReservationService) {}
 
   @Post('create')
   @ApiBody({ type: CreateReservationDto })
-  async create(@Body() createReservationDto: CreateReservationDto): Promise<any> {
+  async create(
+    @Body() createReservationDto: CreateReservationDto,
+  ): Promise<any> {
     try {
       return this.reservationService.create(createReservationDto);
     } catch (error) {
-      throw new BadRequestException(error, 'Error: Reservation cannot be created!')
+      throw new BadRequestException(
+        error,
+        'Error: Reservation cannot be created!',
+      );
     }
   }
 
